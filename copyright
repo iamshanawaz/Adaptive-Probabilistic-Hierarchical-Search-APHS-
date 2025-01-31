@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IAPT v2.0 Implementation Guide</title>
+</head>
+<body>
+    <h1>Implementation Guide for Cryptographic Research Paper Publishing</h1>
+    
+    <!-- STEP 1: CORE HTML TEMPLATE -->
+    <section id="template">
+        <h2>1. Base HTML Structure</h2>
+        <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;!-- REQUIRED METADATA --&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="author" content="Shanawaz Khan"&gt;
+    &lt;meta name="did" content="did:ion:your-unique-identifier"&gt;
+    &lt;meta name="blockchain-hash" content="sha256:YOUR_SHA256_HASH"&gt;
+    &lt;link rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"&gt;
+    
+    &lt;!-- DI PROVIDER LINKS --&gt;
+    &lt;link rel="dns-prefetch" href="https://ion.tbddev.org"&gt;
+    &lt;link rel="dns-prefetch" href="https://arweave.net"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- YOUR PAPER CONTENT HERE --&gt;
+    
+    &lt;!-- BLOCKCHAIN VERIFICATION SECTION --&gt;
+    &lt;div id="blockchain"&gt;
+        &lt;p&gt;Ethereum Tx: &lt;a href="https://etherscan.io/tx/YOUR_TX_HASH"&gt;Verify&lt;/a&gt;&lt;/p&gt;
+        &lt;p&gt;Arweave Permaweb: &lt;a href="https://viewblock.io/arweave/YOUR_TX"&gt;Archive&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- BIOMETRIC AUTH SCRIPT --&gt;
+    &lt;script src="https://webauthn.io/webauthn.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+    </section>
+
+    <!-- STEP 2: IMPLEMENTATION INSTRUCTIONS -->
+    <section id="instructions">
+        <h2>2. Implementation Steps</h2>
+        <ol>
+            <li>
+                <h3>Blockchain Anchoring</h3>
+                <p><strong>Tools Needed:</strong> Arweave Wallet, Ethereum Wallet</p>
+                <ul>
+                    <li>Generate SHA-256 hash of your document: <br>
+                        <code>openssl dgst -sha256 your_paper.html</code></li>
+                    <li>Store hash on Ethereum using <a href="https://remix.ethereum.org">Remix IDE</a>:</li>
+                        <pre><code>// Sample Solidity Smart Contract
+function storeHash(bytes32 docHash) public {
+    documentHashes[msg.sender] = docHash;
+}</code></pre>
+                    <li>Upload to Arweave Permaweb using <a href="https://ardrive.io">ArDrive</a></li>
+                </ul>
+            </li>
+            
+            <li>
+                <h3>Decentralized Identity (DID)</h3>
+                <p><strong>Provider:</strong> Microsoft ION Network</p>
+                <ul>
+                    <li>Create DID Document: <br>
+                        <code>npm install @decentralized-identity/ion-tools</code></li>
+                    <li>Anchor DID to Bitcoin blockchain: <br>
+                        <code>const did = new ION.generate();</code></li>
+                </ul>
+            </li>
+            
+            <li>
+                <h3>Cryptographic Biometrics</h3>
+                <p><strong>Method:</strong> WebAuthn API</p>
+                <pre><code>
+async function registerBiometric() {
+    const credential = await navigator.credentials.create({
+        publicKey: {
+            challenge: new Uint8Array(32),
+            rp: { name: "Shahi Discoveries" },
+            user: { id: new Uint8Array(16), name: "your-did" },
+            pubKeyCredParams: [{ type: "public-key", alg: -7 }]
+        }
+    });
+    // Store credential.id with DID document
+}
+                </code></pre>
+            </li>
+        </ol>
+    </section>
+
+    <!-- STEP 3: VALIDATION CHECKLIST -->
+    <section id="validation">
+        <h2>3. Verification Protocol</h2>
+        <table border="1">
+            <tr><th>Check</th><th>Tool</th><th>Command/URL</th></tr>
+            <tr>
+                <td>DID Resolution</td>
+                <td>ION Resolver</td>
+                <td><code>https://identity.foundation/ion/explorer/?did=your-did</code></td>
+            </tr>
+            <tr>
+                <td>Blockchain Verify</td>
+                <td>Etherscan</td>
+                <td><code>https://etherscan.io/verifyContract?a=YOUR_ADDRESS</code></td>
+            </tr>
+            <tr>
+                <td>Biometric Test</td>
+                <td>WebAuthn Demo</td>
+                <td><code>https://webauthn.io</code></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- LICENSE FOOTER -->
+    <footer style="margin-top:50px">
+        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/">
+            This implementation guide by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/iamshanawaz">Shanawaz Khan</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>.
+        </p>
+        <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-nd.png" width="100">
+    </footer>
+</body>
+</html>
